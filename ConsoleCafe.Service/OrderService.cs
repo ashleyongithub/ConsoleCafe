@@ -1,40 +1,32 @@
 using ConsoleCafe.Data;
-
-namespace ConsoleCafe.Service;
+using ConsoleCafe.Service;
 
 public interface IOrderService
 {
+    void CreateOrderLine(MenuItem item, int quantity);
     List<OrderLine> GetOrderLines();
-    void CreateOrder(MenuItem item, int quantity);
-    decimal GetOrderTotal();
-    decimal GetOrderSubTotal();
-    decimal GetOrderDiscount();
+    decimal GetSubtotal();
+    decimal GetDiscount();
+    decimal GetTotal();
 }
 
 public class OrderService : IOrderService
 {
-    public List<OrderLine> GetOrderLines()
+    private readonly Order _order = new();
+    private readonly IDiscountService _discountService;
+    public OrderService(IDiscountService discountService)
     {
-        throw new NotImplementedException();
+        _discountService = discountService;
     }
+    
+    public void CreateOrderLine(MenuItem item, int quantity) =>
+        _order.OrderLines.Add(new OrderLine { Item = item, Quantity = quantity });
 
-    public void CreateOrder(MenuItem item, int quantity)
-    {
-        throw new NotImplementedException();
-    }
+    public List<OrderLine> GetOrderLines() => _order.OrderLines;
 
-    public decimal GetOrderTotal()
-    {
-        throw new NotImplementedException();
-    }
+    public decimal GetSubtotal() => _order.Subtotal;
 
-    public decimal GetOrderSubTotal()
-    {
-        throw new NotImplementedException();
-    }
+    public decimal GetDiscount() => _discountService.CalculateDiscount(_order);
 
-    public decimal GetOrderDiscount()
-    {
-        throw new NotImplementedException();
-    }
+    public decimal GetTotal() => GetSubtotal() - GetDiscount();
 }
