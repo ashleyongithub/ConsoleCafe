@@ -12,11 +12,11 @@ public class MenuService : IMenuService
 {
     public List<MenuItem> GetMenuItems() =>
     [
-        new() { Name = "BBQ Chicken Toastie", Type = ItemType.Food, Price = 6.23m },
-        new() { Name = "Ham and Cheese Toastie", Type = ItemType.Food, Price = 5.78m },
-        new() { Name = "Chocolate Brownie", Type = ItemType.Food, Price = 3.50m },
-        new() { Name = "Tea", Type = ItemType.Drink, Price = 3.65m },
-        new() { Name = "Coffee", Type = ItemType.Drink, Price = 4.64m },
-        new() { Name = "Water", Type = ItemType.Drink, Price = 0.00m }
+        new() { Id = 1, Name = "BBQ Chicken Toastie", Type = ItemType.Food, Price = 6.23m },
+        new() { Id = 2, Name = "Ham and Cheese Toastie", Type = ItemType.Food, Price = 5.78m },
+        new() { Id = 3, Name = "Chocolate Brownie", Type = ItemType.Food, Price = 3.50m },
+        new() { Id = 4, Name = "Tea", Type = ItemType.Drink, Price = 3.65m },
+        new() { Id = 5, Name = "Coffee", Type = ItemType.Drink, Price = 4.64m },
+        new() { Id = 6, Name = "Water", Type = ItemType.Drink, Price = 0.00m }
     ];
 }

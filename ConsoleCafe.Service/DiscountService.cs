@@ -1,5 +1,4 @@
 using ConsoleCafe.Data;
-using ConsoleCafe.Data.Enums;
 
 namespace ConsoleCafe.Service;
 
@@ -10,19 +9,23 @@ public interface IDiscountService
 
 public class DiscountService : IDiscountService
 {
+    private readonly IDiscountRulesService _discountRulesService;
+    
+    public DiscountService(IDiscountRulesService discountRulesService)
+    {
+        _discountRulesService = discountRulesService;
+    }
     public decimal CalculateDiscount(Order order)
     {
         var subtotal = order.Subtotal;
-        var hasFood = order.OrderLines.Any(i => i.Item.Type == ItemType.Food);
-        var hasNonWaterDrink = order.OrderLines.Any(i => i.Item.Type == ItemType.Drink && i.Item.Name != "Water");
 
         var discount = 0m;
 
-        if (subtotal >= 20)
+        if (_discountRulesService.EligibleForTwentyPercentDiscount(order))
         {
             discount = subtotal * 0.20m;
         }
-        else if (hasFood && hasNonWaterDrink)
+        else if (_discountRulesService.EligibleForTenPercentDiscount(order))
         {
             discount = subtotal * 0.10m;
         }
