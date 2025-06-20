@@ -3,30 +3,36 @@ using ConsoleCafe.Service;
 
 public interface IOrderService
 {
-    void CreateOrderLine(MenuItem item, int quantity);
-    List<OrderLine> GetOrderLines();
-    decimal GetSubtotal();
-    decimal GetDiscount();
-    decimal GetTotal();
+    void CreateOrderLine(Order order, MenuItem item, int quantity);
+    List<OrderLine> GetOrderLines(Order order);
+    decimal GetSubtotal(Order order);
+    decimal GetDiscount(Order order);
+    decimal GetTotal(Order order);
 }
 
 public class OrderService : IOrderService
 {
-    private readonly Order _order = new();
     private readonly IDiscountService _discountService;
     public OrderService(IDiscountService discountService)
     {
         _discountService = discountService;
     }
     
-    public void CreateOrderLine(MenuItem item, int quantity) =>
-        _order.OrderLines.Add(new OrderLine { Item = item, Quantity = quantity });
+    public void CreateOrderLine(Order order, MenuItem item, int quantity)
+    {
+        var existingLine = order.OrderLines.FirstOrDefault(l => l.Item.Name == item.Name);
+        if (existingLine != null)
+            existingLine.Quantity += quantity;
+        else
+            order.OrderLines.Add(new OrderLine { Item = item, Quantity = quantity });
+    }
 
-    public List<OrderLine> GetOrderLines() => _order.OrderLines;
+    public List<OrderLine> GetOrderLines(Order order) => order.OrderLines;
 
-    public decimal GetSubtotal() => _order.Subtotal;
+    public decimal GetSubtotal(Order order) => order.Subtotal;
 
-    public decimal GetDiscount() => _discountService.CalculateDiscount(_order);
+    public decimal GetDiscount(Order order) => _discountService.CalculateDiscount(order);
 
-    public decimal GetTotal() => GetSubtotal() - GetDiscount();
+    public decimal GetTotal(Order order) => GetSubtotal(order) - GetDiscount(order);
+    
 }
